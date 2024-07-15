@@ -1,0 +1,14 @@
+import json
+
+def load_json_file(filepath):
+    with open(filepath, 'r') as file:
+        return json.load(file)
+
+def save_data_to_json_file(data, filepath):
+    with open(filepath, 'w') as file:
+        json.dump(data, file, indent=4)
+
+# Example usage within this script:
+if __name__ == "__main__":
+    data = load_json_file("path/to/your/jsonfile.json")
+    save_data_to_json_file(data, "path/to/your/outputfile.json")

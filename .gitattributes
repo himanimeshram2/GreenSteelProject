@@ -1,0 +1,11 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Specific file types
+*.c text eol=lf
+*.cpp text eol=lf
+*.py text eol=lf
+*.sh text eol=lf
+
+# Ensure that certain files always use CRLF
+*.bat text eol=crlf

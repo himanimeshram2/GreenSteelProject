@@ -1,0 +1,32 @@
+import unittest
+import json
+import os
+from json_utilities import load_json_file, save_data_to_json_file
+
+class TestJsonUtilities(unittest.TestCase):
+    def setUp(self):
+        # Setup a temporary json file
+        self.test_data = {'key': 'value'}
+        self.filepath = 'test_file.json'
+        with open(self.filepath, 'w') as f:
+            json.dump(self.test_data, f)
+
+    def test_load_json_file(self):
+        """Test loading JSON data from a file."""
+        data = load_json_file(self.filepath)
+        self.assertEqual(data, self.test_data)
+
+    def test_save_data_to_json_file(self):
+        """Test saving JSON data to a file."""
+        new_data = {'new_key': 'new_value'}
+        save_data_to_json_file(new_data, self.filepath)
+        with open(self.filepath, 'r') as f:
+            data_loaded = json.load(f)
+        self.assertEqual(data_loaded, new_data)
+
+    def tearDown(self):
+        # Remove the file after the test
+        os.remove(self.filepath)
+
+if __name__ == '__main__':
+    unittest.main()

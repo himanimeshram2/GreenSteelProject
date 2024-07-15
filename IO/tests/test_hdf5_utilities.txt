@@ -1,0 +1,31 @@
+import unittest
+import h5py
+import numpy as np
+import os
+
+from hdf5_utilities import load_hdf5_data, get_hdf5_id_map
+
+class TestHdf5Utilities(unittest.TestCase):
+    def setUp(self):
+        # Setup a temporary hdf5 file
+        self.filepath = 'test_file.h5'
+        self.data = np.arange(10)
+        with h5py.File(self.filepath, 'w') as f:
+            f.create_dataset('test_dataset', data=self.data)
+
+    def test_load_hdf5_data(self):
+        """Test loading data from HDF5 file."""
+        loaded_data = load_hdf5_data(self.filepath, 'test_dataset')
+        np.testing.assert_array_equal(loaded_data, self.data)
+
+    def test_get_hdf5_id_map(self):
+        """Test getting id map from HDF5 file."""
+        id_map = get_hdf5_id_map(self.filepath)
+        self.assertIn('test_dataset', id_map)
+
+    def tearDown(self):
+        # Remove the file after the test
+        os.remove(self.filepath)
+
+if __name__ == '__main__':
+    unittest.main()

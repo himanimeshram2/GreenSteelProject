@@ -1,0 +1,14 @@
+import h5py
+
+def get_hdf5_id_map(filepath):
+    with h5py.File(filepath, 'r') as file:
+        return {name: file[name].id for name in file.keys()}
+
+def load_hdf5_data(filepath, dataset_name):
+    with h5py.File(filepath, 'r') as file:
+        return file[dataset_name][:]
+
+# Example usage within this script:
+if __name__ == "__main__":
+    data_map = get_hdf5_id_map("path/to/your/hdf5file.h5")
+    data = load_hdf5_data("path/to/your/hdf5file.h5", "dataset_name")
