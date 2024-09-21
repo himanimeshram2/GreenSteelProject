@@ -48,15 +48,27 @@ def main():
             print(f"Unsupported file type: {rv.type}")
             return 1
 
-        # Initialize and run the model with loaded data
-        theGreenSteelModel = GreenSteelModel(data)  # Assuming your model class can take the data
+        # Initialize the model with the loaded data
+        theGreenSteelModel = GreenSteelModel(data)  # Assuming your model class takes the data
         theGreenSteelModel.Initialize()
+
+        # Run cost optimization to adjust capacities dynamically
+        print("Optimizing system capacities for minimum cost...")
+        theGreenSteelModel.optimize_system()
+
+        # Run the model with the optimized capacities
+        print("Running the model simulation...")
         theGreenSteelModel.Run()
+
+        # Save the results after the simulation
+        print("Saving results...")
+        theGreenSteelModel.save_results()
+
     except FileNotFoundError:
         print(f"Error: The file {rv.input} was not found.")
         return 1
     except Exception as e:
-        print(f"Error loading model parameters: {e}")
+        print(f"Error loading or running the model: {e}")
         return 1
 
     return 0  # Return zero to indicate success
