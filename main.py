@@ -19,20 +19,39 @@ Please refer to individual components for more details.
 
 @author: Himani Meshram
 """
-from Models.GreenSteelModel import GreenSteelModel
-from IO.CommandLine import ParseCommandLineArgs
+
+from models.energy_model import GreenSteelModel
+from IO.command_line_utils import parse_command_line_args
+from IO.json_utilities import load_json_file
+from IO.csv_utilities import load_csv_file  # Assuming you have similar functionality
+from IO.hdf5_utilities import load_hdf5_data  # Adjust according to actual function signatures
+import sys
+import time
 
 def main():
     try:
         # Parse command line arguments
-        rv = ParseCommandLineArgs()
+        rv = parse_command_line_args()  # Parse args from command line
     except Exception as e:
         print(f"Error parsing command line arguments: {e}")
         return 1  # Return non-zero error code to indicate failure
 
     try:
-        # Load the model parameters from the specified JSON file
-        theGreenSteelModel = GreenSteelModel.FromJsonFile(rv.input)
+        # Load the model parameters based on the file type specified
+        if rv.type == 'json':
+            data = load_json_file(rv.input)
+        elif rv.type == 'csv':
+            data = load_csv_file(rv.input)  # Assumes you have a CSV loader implemented
+        elif rv.type == 'hdf5':
+            data = load_hdf5_data(rv.input, 'dataset_name')  # Modify based on your HDF5 structure
+        else:
+            print(f"Unsupported file type: {rv.type}")
+            return 1
+
+        # Initialize and run the model with loaded data
+        theGreenSteelModel = GreenSteelModel(data)  # Assuming your model class can take the data
+        theGreenSteelModel.Initialize()
+        theGreenSteelModel.Run()
     except FileNotFoundError:
         print(f"Error: The file {rv.input} was not found.")
         return 1
@@ -40,19 +59,11 @@ def main():
         print(f"Error loading model parameters: {e}")
         return 1
 
-    # Initialize and run the model
-    theGreenSteelModel.Initialize()
-    theGreenSteelModel.Run()
-
     return 0  # Return zero to indicate success
 
 if __name__ == '__main__':
-    # Optionally measure execution time
-    import time
     start_time = time.time()
     status = main()
     end_time = time.time()
-    print(f"Execution completed in {end_time - start_time} seconds with status code {status}.")
-
-
- 
+    print(f"Execution completed in {end_time - start_time:.2f} seconds with status code {status}.")
+    sys.exit(status)

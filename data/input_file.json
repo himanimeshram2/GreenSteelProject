@@ -1,0 +1,20 @@
+{
+    "product_target_tonne_per_yr": 3000000,  // 3 Mtpa (Million tonnes per year)
+    "product": "steel",  // Type of product ("steel" or "HBI")
+    "wind_capacity_MW": 245000,  // Wind power installed capacity (MW)
+    "solar_capacity_MW": 500000,  // Solar power installed capacity (MW)
+    "electro_MW": 200000,  // Electrolyzer installed capacity (MW)
+    "battery_MW": 215000,  // Battery storage installed capacity (MW)
+    "BESS_hours_of_storage": 4,  // Battery energy storage in hours
+    "Wind_capex_kW": 1939,  // Wind CAPEX per kW
+    "PV_capex_kW": 906,  // Solar CAPEX per kW
+    "BESS_capex_kW": 1037,  // Battery energy storage CAPEX per kW
+    "electrolyser_capex_kW": 1320,  // Electrolyzer CAPEX per kW
+    "h2_storage_capex_tonne": 599994,  // Hydrogen storage CAPEX per tonne
+    "capex_h2Shaft_ton_euro": 230,  // Hydrogen shaft furnace CAPEX per tonne (in euros)
+    "capex_EAF_ton_euro": 184.375,  // Electric Arc Furnace (EAF) CAPEX per tonne (in euros)
+    "Iron_ore_to_steel_conversion": 1.5,  // Conversion factor for iron ore to steel
+    "DISCOUNT_RATE": 0.1,  // Discount rate used for financial analysis
+    "wind_input_CF_filename": "wind.csv",  // Path to wind capacity factor file (located in the data directory)
+    "solar_input_CF_filename": "pv.csv"  // Path to solar capacity factor file (located in the data directory)
+}
