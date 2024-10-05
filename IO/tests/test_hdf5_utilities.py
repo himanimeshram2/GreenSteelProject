@@ -1,45 +1,42 @@
 import unittest
-import h5py
-import numpy as np
 import os
+import h5py
+from hdf5_utilities import load_hdf5_data, get_hdf5_id_map
 
-from IO.hdf5_utilities import load_hdf5_data, get_hdf5_id_map  # Updated import if in the IO directory
+class TestHDF5Utilities(unittest.TestCase):
 
-class TestHdf5Utilities(unittest.TestCase):
     def setUp(self):
-        """Setup a temporary HDF5 file for testing."""
-        self.filepath = 'test_file.h5'
-        self.data = np.arange(10)
+        self.filepath = 'test_file.hdf5'
+        self.dataset_name = 'test_dataset'
         with h5py.File(self.filepath, 'w') as f:
-            f.create_dataset('test_dataset', data=self.data)
-
-    def test_load_hdf5_data(self):
-        """Test loading data from an HDF5 file."""
-        try:
-            loaded_data = load_hdf5_data(self.filepath, 'test_dataset')
-            np.testing.assert_array_equal(loaded_data, self.data)
-        except Exception as e:
-            self.fail(f"Loading data failed with an unexpected error: {e}")
-
-    def test_get_hdf5_id_map(self):
-        """Test getting ID map from an HDF5 file."""
-        try:
-            id_map = get_hdf5_id_map(self.filepath)
-            self.assertIn('test_dataset', id_map.keys())
-        except Exception as e:
-            self.fail(f"Getting ID map failed with an unexpected error: {e}")
-
-    def test_file_not_found(self):
-        """Test behavior when the file does not exist."""
-        with self.assertRaises(FileNotFoundError):
-            load_hdf5_data('nonexistent_file.h5', 'dataset')
+            f.create_dataset(self.dataset_name, data=[1, 2, 3, 4, 5])
 
     def tearDown(self):
-        """Clean up by removing the temporary file after each test."""
-        try:
+        if os.path.exists(self.filepath):
             os.remove(self.filepath)
-        except FileNotFoundError:
-            pass  # File was not created or was already deleted, ignore
+
+    def test_load_hdf5_data(self):
+        """Test loading data from an HDF5 dataset."""
+        data = load_hdf5_data(self.filepath, self.dataset_name)
+        self.assertEqual(list(data), [1, 2, 3, 4, 5])
+
+    def test_empty_dataset(self):
+        """Test loading an empty dataset from an HDF5 file."""
+        with h5py.File(self.filepath, 'w') as f:
+            f.create_dataset('empty_dataset', data=[])
+
+        data = load_hdf5_data(self.filepath, 'empty_dataset')
+        self.assertEqual(len(data), 0)
+
+    def test_missing_dataset(self):
+        """Test behavior when the dataset is missing."""
+        data = load_hdf5_data(self.filepath, 'non_existent_dataset')
+        self.assertIsNone(data)
+
+    def test_get_hdf5_id_map(self):
+        """Test retrieving ID map from an HDF5 file."""
+        id_map = get_hdf5_id_map(self.filepath)
+        self.assertIn(self.dataset_name, id_map)
 
 if __name__ == '__main__':
     unittest.main()

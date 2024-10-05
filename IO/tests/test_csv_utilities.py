@@ -1,34 +1,47 @@
 import unittest
 import os
-import csv
-from IO.csv_utilities import load_csv_file, save_data_to_csv_file
+from csv_utilities import load_csv_file, save_data_to_csv_file
 
-class TestCsvUtilities(unittest.TestCase):
+class TestCSVUtilities(unittest.TestCase):
+
     def setUp(self):
-        """Set up a temporary CSV file for testing."""
-        self.test_data = [['header1', 'header2'], ['row1col1', 'row1col2'], ['row2col1', 'row2col2']]
         self.filepath = 'test_file.csv'
-        save_data_to_csv_file(self.test_data, self.filepath)
+        self.empty_filepath = 'empty_test_file.csv'
+        self.data = [['Name', 'Age'], ['John Doe', '30'], ['Jane Smith', '25']]
+
+    def tearDown(self):
+        if os.path.exists(self.filepath):
+            os.remove(self.filepath)
+        if os.path.exists(self.empty_filepath):
+            os.remove(self.empty_filepath)
 
     def test_load_csv_file(self):
-        """Test loading data from a CSV file."""
-        data = load_csv_file(self.filepath)
-        self.assertEqual(data, self.test_data)
+        """Test loading a CSV file."""
+        save_data_to_csv_file(self.data, self.filepath)
+        loaded_data = load_csv_file(self.filepath)
+        self.assertEqual(loaded_data, self.data)
+
+    def test_empty_csv_file(self):
+        """Test behavior when the CSV file is empty."""
+        with open(self.empty_filepath, 'w', newline='') as file:
+            pass  # Create an empty file
+
+        data = load_csv_file(self.empty_filepath)
+        self.assertEqual(data, [])  # Expect an empty list for an empty CSV
 
     def test_save_data_to_csv_file(self):
         """Test saving data to a CSV file."""
-        new_data = [['header1', 'header2'], ['newrow1col1', 'newrow1col2']]
-        save_data_to_csv_file(new_data, self.filepath)
-        loaded_data = load_csv_file(self.filepath)
-        self.assertEqual(loaded_data, new_data)
+        save_data_to_csv_file(self.data, self.filepath)
+        self.assertTrue(os.path.exists(self.filepath))
 
-    def tearDown(self):
-        """Clean up by removing the temporary file after each test."""
-        try:
-            os.remove(self.filepath)
-        except FileNotFoundError:
-            pass
+    def test_malformed_csv_file(self):
+        """Test behavior with a malformed CSV file."""
+        with open(self.filepath, 'w', newline='') as file:
+            file.write("Name,Age\nJohn Doe,30\nJane Smith")  # Malformed: Missing age for Jane
+
+        data = load_csv_file(self.filepath)
+        self.assertEqual(len(data), 2)  # It should still read the two lines
+        self.assertEqual(data[1], ['Jane Smith'])  # The malformed line is partially read
 
 if __name__ == '__main__':
     unittest.main()
-

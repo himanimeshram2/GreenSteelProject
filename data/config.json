@@ -1,0 +1,66 @@
+{
+    "India_wind_capacity_MW": 500,
+    "India_solar_capacity_MW": 600,
+    "India_electro_MW": 300,
+    "India_battery_MW": 200,
+    "India_BESS_hours_of_storage": 4,
+    
+    "Australia_wind_capacity_MW": 700,
+    "Australia_solar_capacity_MW": 800,
+    "Australia_electro_MW": 400,
+    "Australia_battery_MW": 250,
+    "Australia_BESS_hours_of_storage": 6,
+
+    "India_cost_assumptions": {
+        "wind_capex_kW": 1200,
+        "solar_capex_kW": 800,
+        "battery_capex_kW": 600,
+        "electrolyser_capex_kW": 500,
+        "h2_storage_capex_tonne": 150,
+        "capex_h2Shaft_ton_euro": 2000,
+        "capex_EAF_ton_euro": 1800,
+        "carbon_price_per_tonne": 30
+    },
+    
+    "Australia_cost_assumptions": {
+        "wind_capex_kW": 1000,
+        "solar_capex_kW": 700,
+        "battery_capex_kW": 550,
+        "electrolyser_capex_kW": 480,
+        "h2_storage_capex_tonne": 140,
+        "capex_h2Shaft_ton_euro": 2200,
+        "capex_EAF_ton_euro": 1900,
+        "carbon_price_per_tonne": 50
+    },
+
+    "India_emission_factors": {
+        "wind": 10,
+        "solar": 25,
+        "grid": 450
+    },
+    
+    "Australia_emission_factors": {
+        "wind": 8,
+        "solar": 22,
+        "grid": 300
+    },
+    
+    "India_hydrogen_price_per_kg": 4,
+    "India_hydrogen_transport_cost_per_tonne_km": 0.05,
+    
+    "Australia_hydrogen_price_per_kg": 3.5,
+    "Australia_hydrogen_transport_cost_per_tonne_km": 0.03,
+    
+    "India_discount_rate": 0.07,
+    "India_project_lifetime": 25,
+    
+    "Australia_discount_rate": 0.05,
+    "Australia_project_lifetime": 30,
+
+    "India_wind_input_CF_filename": "wind.csv",
+    "India_solar_input_CF_filename": "pv.csv",
+    "Australia_wind_input_CF_filename": "wind.csv",
+    "Australia_solar_input_CF_filename": "pv.csv",
+
+    "traditional_steel_emission_factor": 2.5
+}
